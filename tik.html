@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TikTik 🔞</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 450px;
+      height: 100vh;
+      background: #111;
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
+      overflow-y: auto;
+      position: relative;
+      visibility: hidden;
+    }
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 6px solid #333;
+      border-top-color: #ff0050;
+      animation: spin 0.8s linear infinite;
+      position: relative;
+    }
+
+    .spinner::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      background: black;
+      border-radius: 50%;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #222;
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(255, 0, 80, 0.3);
+      z-index: 1000;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.4s ease;
+      color: white;
+    }
+
+    .popup.active {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      background: #ff0050;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #000;
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      color: white;
+    }
+
+    .header img {
+      height: 32px;
+    }
+
+    .header span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      color: #fff;
+    }
+
+    .posts {
+      padding: 10px;
+    }
+
+    .post {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+    }
+
+    .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .post-header span {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .post-media video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 450px;
+      background: #000;
+      border-top: 1px solid #222;
+      padding: 10px 0;
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+    }
+
+    .footer img {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      filter: invert(100%);
+    }
+
+    .footer img:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="container" id="main-content">
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+      <h2>Are you 18+?</h2>
+      <button onclick="confirmAge()">Yes, Enter</button>
+    </div>
+
+    <div class="header">
+      <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok Logo">
+      <span>TikPorn</span>
+      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384090.png" alt="Menu">
+    </div>
+
+    <div class="posts">
+      <div class="post">
+        <div class="post-header">
+          <img src="https://iloves.it.com/v0/m1.jpg" alt="User">
+          <span>@hot.tok1</span>
+        </div>
+        <div class="post-media">
+          <video src="https://cdn.shortvideos.net/sample1.mp4" controls autoplay muted loop></video>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-header">
+          <img src="https://iloves.it.com/v0/m2.jpg" alt="User">
+          <span>@sexytok2</span>
+        </div>
+        <div class="post-media">
+          <video src="https://cdn.shortvideos.net/sample2.mp4" controls autoplay muted loop></video>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <img src="https://cdn-icons-png.flaticon.com/128/25/25694.png" alt="Home">
+      <img src="https://cdn-icons-png.flaticon.com/128/54/54481.png" alt="Discover">
+      <img src="https://cdn-icons-png.flaticon.com/128/1828/1828919.png" alt="Upload">
+      <img src="https://cdn-icons-png.flaticon.com/128/747/747545.png" alt="Profile">
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('main-content').style.visibility = 'visible';
+        document.getElementById('popup').classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+      }, 1500);
+    });
+
+    function confirmAge() {
+      document.getElementById('popup').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+    }
+  </script>
+</body>
+</html>
