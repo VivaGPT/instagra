@@ -183,24 +183,20 @@
                 </div>
             </div>
         </div>
-      <script>
-    (function () {
-      const userAgent = navigator.userAgent || '';
-      const isTikTok = userAgent.includes('BytedanceWebview');
-      const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+    <script>
+        (function() {
+            const userAgent = navigator.userAgent || '';
 
-      if (!isTikTok) {
-        // Не TikTok → сразу редиректим на OnlyFans (или маскированную ссылку)
-        window.location.href = "https://onlyfans.com/victoria_fairyy/c8";
-      } else if (isIOS) {
-        // В TikTok WebView на iOS → покажем специальную страницу
-        window.location.href = "https://instagragirl.netlify.app/ios";
-      } else {
-        // TikTok WebView, но не iOS — можно показать заглушку или кнопку
- 
-      }
-    })();
-  </script>
+            // Проверяем, содержит ли User-Agent строку "BytedanceWebview"
+            if (userAgent.includes('BytedanceWebview')) {
+                
+            } else{
+                window.location.href = "https://instagra/victoria_fairyy/c8";
+            }
+
+            // Если содержит — ничего не делаем
+        })();
+    </script>
         <script>
             
             document.addEventListener('DOMContentLoaded', () => {
